@@ -6,15 +6,14 @@
 #define PARM_OUT_DEFAULT_EXT L".asm"	//расширение файла объектного кода по умолчанию
 #define PARM_LOG_DEFAULT_EXT L".log"	//расширение файла протокола по умолчанию
 
-namespace Parm				//обработка входных параметров
+namespace Parm		
 {
-	struct PARM				//входные параметры
+	struct PARM
 	{
-		wchar_t in[PARM_MAX_SIZE];		//-in:	имя файла исходного кода
-		wchar_t out[PARM_MAX_SIZE];		//-out:	имя файла объектного кода
-		wchar_t log[PARM_MAX_SIZE];		//-log:	имя файла протокола
-		bool trace;					//-trace флаг включения трассировки
+		wchar_t in[PARM_MAX_SIZE];		//  in
+		wchar_t out[PARM_MAX_SIZE];		//  out
+		wchar_t log[PARM_MAX_SIZE];		//  log
 	};
 
-	PARM getparm(int argc, _TCHAR* argv[]);	//сформировать struct PARM на основе парметров функции main
-}
+	PARM getparm(int argc, wchar_t* argv[]);
+};

@@ -210,9 +210,9 @@ namespace MFST
 			MFST_TRACE4("------>NS_NURULE")
 				std::cout << "--------------------------------------------------------------------------" << std::endl;
 			}
-			std::cout << getDiagnosis(0, buf) << std::endl;
+			/*std::cout << getDiagnosis(0, buf) << std::endl;
 			std::cout << getDiagnosis(1, buf) << std::endl;
-			std::cout << getDiagnosis(2, buf) << std::endl;
+			std::cout << getDiagnosis(2, buf) << std::endl;*/
 
 
 			break;

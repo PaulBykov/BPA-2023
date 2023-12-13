@@ -24,6 +24,7 @@ namespace Error
 		ERROR_ENTRY_NODEF(114), ERROR_ENTRY_NODEF5(115),
 		ERROR_ENTRY_NODEF10(120),ERROR_ENTRY_NODEF10(130),ERROR_ENTRY_NODEF10(140),ERROR_ENTRY_NODEF10(150),
 		ERROR_ENTRY_NODEF10(160),ERROR_ENTRY_NODEF10(170),ERROR_ENTRY_NODEF10(180),ERROR_ENTRY_NODEF10(190),
+	
 		ERROR_ENTRY(200,"[Ëåêñè÷åñêàÿ] Äâîéíîå îáúÿâëåíèå"),
 		ERROR_ENTRY(201	,"[Ëåêñè÷åñêàÿ] Îøèáêà ëåêñè÷åñêîãî àíàëèçà"),
 		ERROR_ENTRY(202,"[Ëåêñè÷åñêàÿ] Äëèíà èäåíòèôèêàòîğà áîëüøå 8"),
@@ -35,23 +36,26 @@ namespace Error
 		ERROR_ENTRY(208,"[Ëåêñè÷åñêàÿ] Ìàêñèìàëüíîå çíà÷åíèå òèïà number 32767"),
 		ERROR_ENTRY(209,"[Ëåêñè÷åñêàÿ] Ïğåâûøåí ğàçìåğ symbol"),
 		ERROR_ENTRY(210, "[Ëåêñè÷åñêàÿ] Íåäîïóñòèìîå ñî÷èòàíèå ëèòåğàëà è òèïà äàííûõ"),
+		ERROR_ENTRY_NODEF5(211), ERROR_ENTRY_NODEF(216),ERROR_ENTRY_NODEF(217),ERROR_ENTRY_NODEF(218),ERROR_ENTRY_NODEF(219),
 		ERROR_ENTRY_NODEF10(220),
 		ERROR_ENTRY_NODEF10(230), ERROR_ENTRY_NODEF10(240),ERROR_ENTRY_NODEF50(250), ERROR_ENTRY_NODEF100(300), ERROR_ENTRY_NODEF100(400),
+
 		ERROR_ENTRY(500,"[Cåìàíòè÷åñêàÿ] Íåò òî÷êè âõîäà main"),
 		ERROR_ENTRY(501,"[Cåìàíòè÷åñêàÿ] Áîëåå îäíîé òî÷êè âõîäà main"),
 		ERROR_ENTRY(502,"[Cåìàíòè÷åñêàÿ] Âîçâğàùàåìîå çíà÷åíèå íå ñîîòâåòñòâóåò òèïó ôóíêöèè"),
 		ERROR_ENTRY(503,"[Cåìàíòè÷åñêàÿ] Êîëè÷åñòâî ïàğàìåòğîâ ôóíêöèè áîëüøå äîïóñòèìîãî"),
 		ERROR_ENTRY(504,"[Cåìàíòè÷åñêàÿ] Ïåğåäàâàåìûå ïàğàìåòğû íå ñîîòâåòñòâóşò ôóíêöèè"),
 		ERROR_ENTRY(505,"[Cåìàíòè÷åñêàÿ] Íå ñîîòâåòñâóåò êîëè÷åñòâî ïåğåäàâàåìûõ ïàğàìåòğîâ"),
-		ERROR_ENTRY(506,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğàõ ôóíêöèè pow()"),
+		ERROR_ENTRY(506,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğàõ âñòğîåííîé ôóíêöèè"),
 		ERROR_ENTRY(507,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğàõ ôóíêöèè compare()"),
-		ERROR_ENTRY(508,"[Cåìàíòè÷åñêàÿ] Ïîïûòêà ñğàâíåíèÿ îïåğàíäîâ íå òèïà ushort"),
+		ERROR_ENTRY(508,"[Cåìàíòè÷åñêàÿ] Íåñîâìåñòèìûé îïåğàòîğ è òèï äàííûõ"),
 		ERROR_ENTRY(509,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğå ôóíêöèè write()"),
 		ERROR_ENTRY(510,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïîäêëş÷åíèè áèáëèîòåêè"),
 		ERROR_ENTRY(511,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğàõ öèêëà repeat()"),
-		ERROR_ENTRY_NODEF(512),ERROR_ENTRY_NODEF(513),ERROR_ENTRY_NODEF(514
-		), ERROR_ENTRY_NODEF5(515), ERROR_ENTRY_NODEF10(520),
-		ERROR_ENTRY_NODEF10(530), ERROR_ENTRY_NODEF10(540), ERROR_ENTRY_NODEF50(550),
+		ERROR_ENTRY_NODEF(512),ERROR_ENTRY_NODEF(513),ERROR_ENTRY_NODEF(514),
+		ERROR_ENTRY_NODEF5(515), ERROR_ENTRY_NODEF10(520), ERROR_ENTRY_NODEF10(530),
+		ERROR_ENTRY_NODEF10(540), ERROR_ENTRY_NODEF50(550),
+
 		ERROR_ENTRY(600,"[Cèíòàêñè÷åñêàÿ] Íåâåğíàÿ ñòğóêòóğà ïğîãğàììû"),
 		ERROR_ENTRY(601,"[Cèíòàêñè÷åñêàÿ] Îøèáî÷íàÿ êîíñòğóêöèÿ â ôóíêöèè"),
 		ERROR_ENTRY(602,"[Cèíòàêñè÷åñêàÿ] Îøèáêà â âûğàæåíèè"),
@@ -65,17 +69,17 @@ namespace Error
 	};
 	ERROR geterror(int id)
 	{
-		ERROR error_info;											// ñîçäàíèå ñòğóêòóğû êîòîğóş íàäî áóäåò âåğíóòü
+		ERROR error_info;	
+		error_info.id = id;
+
 		if (id > 0 && id < ERROR_MAX_ENTRY)							// ñğàâíèâàíèå äèàïàçîíà
 		{
-			error_info.id = errors[id].id;
 			strcpy_s(error_info.message, errors[id].message);
 			error_info.inext.col = -1;
 			error_info.inext.line = -1;
 		}
 		else
 		{
-			error_info.id = errors[0].id;
 			strcpy_s(error_info.message, errors[0].message);
 		}
 		return error_info;
@@ -86,7 +90,7 @@ namespace Error
 		ERROR error_info;												//	ñîçäàíèå ñòğóêòóğó êîòîğóş íàäî áóäåò âåğíóòü
 		if (id > 0 && id < ERROR_MAX_ENTRY)						// ñğàâíåíèå äèàïàçîíà
 		{
-			error_info.id = errors[id].id;
+			error_info.id = id;
 			error_info.inext.col = col;
 			error_info.inext.line = line;
 			strcpy_s(error_info.message, errors[id].message);

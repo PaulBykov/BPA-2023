@@ -4,7 +4,9 @@ namespace LT
 {
 	LexTable Create(int size)
 	{
-		if (size > LT_MAXSIZE) throw ERROR_THROW(206);
+		if (size > LT_MAXSIZE) 
+			throw ERROR_THROW(206);
+
 		LexTable Table;
 		Table.maxSize = size;
 		Table.size = 0;

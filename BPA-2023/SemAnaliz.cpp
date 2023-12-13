@@ -48,7 +48,7 @@ namespace Sem
 				break;
 
 
-			case LEX_PRINT: // проверка print
+			case LEX_PRINT:
 			{
 				i++;
 				if (tables.lexTable.table[i++].lexema == LEX_LEFTTHESIS)
@@ -64,13 +64,15 @@ namespace Sem
 
 				//if (dataTypeLeftOp != IT::USHORT || dataTypeRightOp != IT::USHORT)
 
-				if (!(dataTypeLeftOp == IT::USHORT && dataTypeRightOp == IT::USHORT)) {
+				if (!(dataTypeLeftOp == IT::USHORT && dataTypeRightOp == IT::USHORT) 
+					&& !(dataTypeLeftOp == IT::BOOL && dataTypeRightOp == IT::BOOL)) 
+				{
 					throw ERROR_THROW_IN(508, tables.lexTable.table[i].numOfString, 0);
 				}
 				
 				break;
 			}
-			case LEX_COMPARE: // проверка compare
+			case LEX_COMPARE:
 			{
 				int paramsCount = 0;
 

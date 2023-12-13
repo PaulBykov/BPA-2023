@@ -1,9 +1,12 @@
 ﻿#include "stdafx.h"
 
+const bool testMode = false;
+
 int _tmain(int argc, _TCHAR** argv)
 {
 	setlocale(LC_ALL, "Rus");
 	Log::LOG log = Log::INITLOG;
+
 	try
 	{
 		Parm::PARM parm = Parm::getparm(argc, argv); // передача и обработка параметров
@@ -22,8 +25,8 @@ int _tmain(int argc, _TCHAR** argv)
 
 
 
-		/*MFST_TRACE_START*/
-		MFST::Mfst mfst(lex, GRB::getGreibach(), parm.trace);
+		//MFST_TRACE_START
+		MFST::Mfst mfst(lex, GRB::getGreibach(), testMode);
 
 		mfst.start();										
 		mfst.savededucation();
@@ -43,23 +46,20 @@ int _tmain(int argc, _TCHAR** argv)
 			*log.stream << SEM_SUCCESS;
 		}
 		
-		
-		
+
+
 		Gen::CodeGeneration(lex, parm.out);
 
-
-		system("pause");
 		Log::Close(log);
 	}
 	catch (Error::ERROR error)
 	{
 		Log::WriteError(log, error);
-		std::cout << "Error on line: " << error.inext.line 
-			<< " : " << error.id 
-			<< ": " << error.message 
-			<< "\n";
-		
-		system("pause");
+
+		WRITE_MSG_STATUS(cout);
+	}
+	catch (exception error) {
+		std::cout << "Ошибка " << error.what() << "\n";
 	}
 
 	return 0;

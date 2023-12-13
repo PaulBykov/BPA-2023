@@ -55,10 +55,16 @@ namespace IT
 			{
 			case USHORT:
 				if (!(idTable.table[i].idType == OP))
-					*log.stream << "integer" << " > "; break;
+					*log.stream << "number" << " > "; break;
 			case STR:
 				if (!(idTable.table[i].idType == OP))
 					*log.stream << "string" << " > "; break;
+			case CHR:
+				if (!(idTable.table[i].idType == OP))
+					*log.stream << "char" << " > "; break;
+			case BOOL:
+				if (!(idTable.table[i].idType == OP))
+					*log.stream << "bool" << " > "; break;
 			default: *log.stream << "unknown" << " > "; break;
 			}
 
@@ -99,10 +105,16 @@ namespace IT
 			{
 			case USHORT:
 				if (!(idTable.table[i].idType == OP))
-					cout<< "integer" << " > "; break;
+					cout<< "number" << " > "; break;
 			case STR:
 				if (!(idTable.table[i].idType == OP))
 					cout << "string" << " > "; break;
+			case CHR:
+				if (!(idTable.table[i].idType == OP))
+					cout << "char" << " > "; break;
+			case BOOL:
+				if (!(idTable.table[i].idType == OP))
+					cout << "bool" << " > "; break;
 			default: cout << "unknown" << " > "; break;
 			}
 			switch (idTable.table[i].idType)

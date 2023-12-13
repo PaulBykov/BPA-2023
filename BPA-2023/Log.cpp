@@ -80,11 +80,11 @@ namespace Log
 	{
 		if (log.stream == nullptr || !log.stream->is_open())
 		{
-			std::cout << "Ошибка " << error.id << ": " << error.message << ", строка " << error.inext.line << ", позиция " << error.inext.col << std::endl;
+			WRITE_MSG_STATUS(cout);
 		}
 		else
 		{
-			*log.stream << "Ошибка " << error.id << ": " << error.message << ", строка " << error.inext.line << ", позиция " << error.inext.col << std::endl;
+			WRITE_MSG_STATUS(*log.stream);
 		}
 	}
 
