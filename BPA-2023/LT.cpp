@@ -35,7 +35,7 @@ namespace LT
 	Entry writeEntry(Entry& entry, unsigned char lexema, int indx, int line)
 	{
 		entry.lexema = lexema;
-		entry.idxTI = indx;
+		entry.indexIT = indx;
 		entry.numOfString = line;
 		return entry;
 	}
@@ -58,7 +58,7 @@ namespace LT
 			}
 			*log.stream << lexTable.table[i].lexema;
 			if (lexTable.table[i].lexema == LEX_ID || lexTable.table[i].lexema == LEX_LITERAL || lexTable.table[i].lexema == LEX_LOGICAL)
-				*log.stream << "<" << lexTable.table[i].idxTI << ">";
+				*log.stream << "<" << lexTable.table[i].indexIT << ">";
 		}
 	}
 
@@ -80,7 +80,7 @@ namespace LT
 			}
 			cout << lexTable.table[i].lexema;
 			if (lexTable.table[i].lexema == LEX_ID || lexTable.table[i].lexema == LEX_LITERAL || lexTable.table[i].lexema == LEX_LOGICAL)
-				cout << "<" << lexTable.table[i].idxTI << ">";
+				cout << "<" << lexTable.table[i].indexIT << ">";
 		}
 	}
 }

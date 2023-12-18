@@ -1,0 +1,10 @@
+include 33
+
+
+main
+{ 	
+	var string str;
+	str = "21";
+
+	return 0;
+}

@@ -1,0 +1,19 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+number function func(){
+	var number abc;
+	abc = 20;
+	return abc;
+}
+
+
+main
+{ 	
+	
+	var string str;
+	str = "21";
+
+	write(func);
+
+	return 1;
+}

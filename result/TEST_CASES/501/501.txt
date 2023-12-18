@@ -1,0 +1,16 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+main
+{ 	
+	var number a;
+	a = 'c';
+
+	return 0;
+}
+
+
+main{
+	
+	return 1;
+}

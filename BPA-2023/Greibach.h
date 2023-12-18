@@ -8,6 +8,7 @@ namespace GRB
 		GRBALPHABET nn;			// нетерминал (левый символ правила) < 0
 		int iderror;			// идентификатор диагностического сообщения
 		short size;				// количество цепочек - правых частей правила
+
 		struct Chain			// цепочка (правая часть правила)
 		{
 			short size;						// длина цепочки
@@ -24,7 +25,9 @@ namespace GRB
 			static bool isN(GRBALPHABET s) { return !isT(s); };	 // нетерминал?
 			static char alphabet_to_char(GRBALPHABET s) { return isT(s) ? char(s) : char(-s); }; // GRBALPHABET->char
 		}*chains;							// массив цепочек - правых частей правила 
+
 		Rule() { nn = 0x00; size = 0; };
+
 		Rule(
 			GRBALPHABET pnn,		// нетерминал (< 0) 
 			int iderror,			// идентификатор диагностического сообщения (Error)
@@ -61,5 +64,6 @@ namespace GRB
 		);
 		Rule getRule(short n);		// получить правило по номеру
 	};
+
 	Greibach getGreibach();			// получить грамматику
 }

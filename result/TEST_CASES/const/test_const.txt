@@ -1,0 +1,15 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+main
+{ 	
+	var number a;
+	a = 20;
+	var number b;
+	b = 10;
+
+	const number c = b - a + 30 - b + 10;
+	write(c);
+
+	return 0;
+}

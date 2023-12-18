@@ -1,0 +1,14 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+main
+{ 	
+	
+	var string str;
+	str = "21";
+
+	var string another;
+	another = str + "12";
+
+	return 0;
+}

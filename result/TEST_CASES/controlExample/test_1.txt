@@ -1,6 +1,5 @@
 include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
 
-абв
 
 number function max(number a, number b)
 {
@@ -12,15 +11,14 @@ number function max(number a, number b)
 	}
 	return res;
 }
- 
 
 main
 { 	
-	?sometext
-		this is comment test
-	?
-
 	var number a;
+	a = 1539 + 921;
+	
+	const number cos = 5 + a - 3;
+	
 	var number b;
 	var number c;
 	var number d;
@@ -28,12 +26,14 @@ main
 	var number res;
 	
     c = 12;
-    a = 1539 + 921;
+    
 
-	repeat(10)
+	repeat(c)
 	{
 	 c= c - 1;
 	} 
+
+	b = 0;
 
     write("Output of values c and a:");
     write(c);

@@ -3,13 +3,12 @@
 unsigned char** divideText(In::IN in)		// формирование массива строк, состоящего из лексем
 {
 	int size = in.size;
-	unsigned char* text = in.text; 
+	unsigned char* text = in.text;
 	unsigned char** word = new unsigned char* [MAX_WORDS]; //выделение памяти для разделения лексем
 
 	for (int i = 0; i < MAX_WORDS; i++) {
 		word[i] = new unsigned char[WORD_SIZE] {NULL};
-
-	}	
+	}
 
 	bool findSP, findLit = false;	//флаги сепараторов и литералов
 
@@ -22,10 +21,17 @@ unsigned char** divideText(In::IN in)		// формирование массива строк, состоящего
 				i++;
 			i++;
 		}
-		
+
 		findSP = false;
 
-		if (text[i] == '\"' || text[i] == '?') // случаи комментария или строкового литерала
+		if (text[i] == '?') {
+			do {
+				i++;
+			} while (text[i] != '?' && i < size - 1);
+			i++;
+		}
+
+		if (text[i] == '\"') // случаи комментария или строкового литерала
 			findLit = !findLit;
 
 		if (((in.code[(unsigned char)text[i]] == In::IN::S) ||

@@ -1,0 +1,15 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+number function func(number a){
+	var number b;
+	
+	return "2";
+}
+
+main
+{ 	
+	var number variabl;
+	variabl = func(1);
+
+	return 0;
+}

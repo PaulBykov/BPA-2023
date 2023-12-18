@@ -6,16 +6,21 @@ namespace IT
 	{
 		if (size > TI_MAXSIZE)
 			throw ERROR_THROW(204);
+
 		IdTable Table;
 		Table.maxSize = size;
 		Table.size = 0;
-		Table.table = new Entry[size];
+
+		Table.table = (new Entry[size]);
+
 		return Table;
 	}
 
 	void Add(IdTable& idTable, Entry entry)
 	{
-		if (idTable.size > idTable.maxSize) throw ERROR_THROW(205);
+		if (idTable.size > idTable.maxSize)
+			throw ERROR_THROW(205);
+
 		idTable.table[idTable.size++] = entry;
 	}
 
@@ -53,7 +58,7 @@ namespace IT
 			*log.stream << idTable.table[i].idRegion << " > ";
 			switch (idTable.table[i].idDataType)
 			{
-			case USHORT:
+			case NUM:
 				if (!(idTable.table[i].idType == OP))
 					*log.stream << "number" << " > "; break;
 			case STR:
@@ -70,21 +75,32 @@ namespace IT
 
 			switch (idTable.table[i].idType)
 			{
-			case V: *log.stream << "переменная > "; break;
-			case F: *log.stream << "функция > "; break;
-			case P: *log.stream << "параметр > "; break;
-			case L: *log.stream << "литерал > "; break;
+			case VAR: *log.stream << "переменная > "; break;
+			case FUNC: *log.stream << "функция > "; break;
+			case PARM: *log.stream << "параметр > "; break;
+			case LIT: *log.stream << "литерал > "; break;
 			case OP:
 				*log.stream << "оператор > ";
 				numberOP++;
 				break;
 			default: *log.stream << "unknown > "; break;
 			}
-			*log.stream << idTable.table[i].idxfirstLE << " > ";
-			if (idTable.table[i].idDataType == USHORT && (idTable.table[i].idType == V || idTable.table[i].idType == L))
-				*log.stream << std::left << idTable.table[i].value.number;
-			else if (idTable.table[i].idDataType == STR && (idTable.table[i].idType == V || idTable.table[i].idType == L))
-				*log.stream << "[" << (int)idTable.table[i].value.vstr.len << "]\"" << idTable.table[i].value.vstr.str << "\"";
+
+			*log.stream << idTable.table[i].indexLT << " > ";
+
+			if (idTable.table[i].idDataType == NUM
+				&& (idTable.table[i].idType == VAR
+					|| idTable.table[i].idType == LIT))
+			{
+				*log.stream << std::left << get<short>(idTable.table[i].value);
+			}
+			else if (idTable.table[i].idDataType == STR
+				&& (idTable.table[i].idType == VAR
+					|| idTable.table[i].idType == LIT))
+			{
+				*log.stream << "[" << (int)get<string>(idTable.table[i].value).length()
+					<< "]\"" << get<string>(idTable.table[i].value) << "\"";
+			}
 			else
 				*log.stream << "нет значения";
 			*log.stream << std::endl;
@@ -101,11 +117,12 @@ namespace IT
 			cout << i << " > ";
 			cout << idTable.table[i].id << " > ";
 			cout << idTable.table[i].idRegion << " > ";
-			switch (idTable.table[i].idDataType)
-			{
-			case USHORT:
+
+
+			switch (idTable.table[i].idDataType) {
+			case NUM:
 				if (!(idTable.table[i].idType == OP))
-					cout<< "number" << " > "; break;
+					cout << "number" << " > "; break;
 			case STR:
 				if (!(idTable.table[i].idType == OP))
 					cout << "string" << " > "; break;
@@ -117,25 +134,39 @@ namespace IT
 					cout << "bool" << " > "; break;
 			default: cout << "unknown" << " > "; break;
 			}
-			switch (idTable.table[i].idType)
-			{
-			case V: cout << "переменная > "; break;
-			case F: cout << "функция > "; break;
-			case P: cout << "параметр > "; break;
-			case L: cout << "литерал > "; break;
+
+
+			switch (idTable.table[i].idType) {
+			case VAR: cout << "переменная > "; break;
+			case FUNC: cout << "функция > "; break;
+			case PARM: cout << "параметр > "; break;
+			case LIT: cout << "литерал > "; break;
 			case OP:
-				cout<< "оператор > ";
+				cout << "оператор > ";
 				numberOP++;
+
 				break;
+			case CONST:
+				cout << "константа > "; break;
 			default: cout << "unknown > "; break;
 			}
-			cout << idTable.table[i].idxfirstLE << " > ";
-			if (idTable.table[i].idDataType == USHORT && (idTable.table[i].idType == V || idTable.table[i].idType == L))
-				cout<< std::left << idTable.table[i].value.number;
-			else if (idTable.table[i].idDataType == STR && (idTable.table[i].idType == V || idTable.table[i].idType == L))
-				cout << "[" << (int)idTable.table[i].value.vstr.len << "]\"" << idTable.table[i].value.vstr.str << "\"";
-			else
+
+
+			cout << idTable.table[i].indexLT << " > ";
+			if (idTable.table[i].idDataType == NUM
+				&& (idTable.table[i].idType == VAR
+					|| idTable.table[i].idType == LIT))
+			{
+				cout << std::left << get<short>(idTable.table[i].value);
+			}
+
+			else if (idTable.table[i].idDataType == STR && (idTable.table[i].idType == VAR || idTable.table[i].idType == LIT)) {
+				cout << "[" << get<string>(idTable.table[i].value).length() << "]\"" << get<string>(idTable.table[i].value) << "\"";
+			}
+			else {
 				cout << "нет значения";
+			}
+
 			cout << std::endl;
 		}
 		cout << std::setfill('*') << std::setw(40) << '*' << std::setfill(' ') << std::setw(1) << std::endl;

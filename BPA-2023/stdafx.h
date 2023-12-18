@@ -5,6 +5,8 @@ using namespace std;
 #include <tchar.h>
 #include <iostream>
 #include <cstring>
+#include <sstream>
+#include <cctype>
 #include <algorithm>
 #include <fstream>
 #include <string>
@@ -14,6 +16,8 @@ using namespace std;
 #include <cwchar>
 #include <mbstring.h>
 #include <stack>
+#include <map>
+#include <unordered_map>
 
 #include "Log.h"
 #include "Error.h"

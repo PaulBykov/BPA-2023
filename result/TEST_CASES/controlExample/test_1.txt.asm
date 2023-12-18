@@ -1,5 +1,5 @@
 .586
-	.model flat, stdcall
+.model flat, stdcall
 	includelib libucrt.lib
 	includelib kernel32.lib
 	includelib D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib
@@ -15,22 +15,25 @@
 
 .const
 	L1 BYTE 'D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib', 0
-	L2 WORD 12
-	L3 WORD 1539
-	L4 WORD 921
-	L5 WORD 1
-	L6 BYTE 'Output of values c and a:', 0
-	L7 BYTE 'max of a and b are: ', 0
-	L8 BYTE 'd', 0
-	L9 BYTE 'Hello world', 0
-	L10 BYTE 'Output of string str1 and str2:', 0
-	L11 BYTE 'lexicographic string comparison str3 and str4:', 0
-	L12 BYTE 'hello', 0
-	L13 BYTE 'hello ', 0
-	L14 WORD 1
-	L15 BYTE 'are equels', 0
-	L16 BYTE 'are not the same', 0
-	L17 WORD 0
+	L2 WORD 1539
+	L3 WORD 921
+	maincos WORD 2462
+	L4 WORD 5
+	L5 WORD 3
+	L6 WORD 12
+	L7 WORD 1
+	L8 WORD 0
+	L9 BYTE 'Output of values c and a:', 0
+	L10 BYTE 'max of a and b are: ', 0
+	L11 BYTE 'd', 0
+	L12 BYTE 'Hello world', 0
+	L13 BYTE 'Output of string str1 and str2:', 0
+	L14 BYTE 'lexicographic string comparison str3 and str4:', 0
+	L15 BYTE 'hello', 0
+	L16 BYTE 'hello ', 0
+	L17 WORD 1
+	L18 BYTE 'are equels', 0
+	L19 BYTE 'are not the same', 0
 
 .data
 	maxres WORD 0
@@ -68,25 +71,37 @@ max ENDP
 
 main PROC
 	push L2
-	pop mainc
-	push L3
 	pop eax
-	push L4
+	push L3
 	pop ebx
 	add eax, ebx
 	push eax
 	pop maina
-	movzx ecx, mainc
-p2:
-	push mainc
+	pop eax
+	push maina
+	pop ebx
+	add eax, ebx
+	push eax
 	pop ebx
 	push L5
 	pop eax
 	sub ebx, eax
 	push ebx
+	push L6
+	pop mainc
+	movzx ecx, mainc
+p2:
+	push mainc
+	pop ebx
+	push L7
+	pop eax
+	sub ebx, eax
+	push ebx
 	pop mainc
 loop p2
-	push offset L6
+	push L8
+	pop mainb
+	push offset L9
 	call _printS
 	push mainc
 	call _printN
@@ -98,7 +113,7 @@ loop p2
 	jg p3
 	je p4
 p3:
-	push offset L7
+	push offset L10
 	call _printS
 	movzx eax, mainb
 	push eax
@@ -110,40 +125,40 @@ p3:
 	push maind
 	call _printN
 p4:
-	push offset L8
-	pop mainstr1
-	push offset L9
-	pop mainstr2
-	push offset L10
-	call _printS
-	push mainstr1
-	call _printS
-	push mainstr2
-	call _printS
 	push offset L11
-	call _printS
+	pop mainstr1
 	push offset L12
-	pop mainstr3
+	pop mainstr2
 	push offset L13
+	call _printS
+	push offset mainstr1
+	call _printS
+	push offset mainstr2
+	call _printS
+	push offset L14
+	call _printS
+	push offset L15
+	pop mainstr3
+	push offset L16
 	pop mainstr4
 	push mainstr4
 	push mainstr3
 	call _compare
 	push eax
 	pop mainres
-	push L14
+	push L17
 	pop maininfo
 	mov ax, mainres
-	cmp ax, L5
+	cmp ax, L7
 	je p5
 	jg p6
 	jl p6
 p5:
-	push offset L15
+	push offset L18
 	call _printS
 	jmp ife1
 p6:
-	push offset L16
+	push offset L19
 	call _printS
 ife1:
 	push 0

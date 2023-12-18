@@ -1,0 +1,15 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+bool function func(number a,number a1,number a2,number a3,number a4,number a5,number a6,number a7,number a8,number a9){
+	var bool info;
+	info = false;
+	
+	return info;
+}
+
+main
+{ 	
+	write(1);
+	
+	return 0;
+}

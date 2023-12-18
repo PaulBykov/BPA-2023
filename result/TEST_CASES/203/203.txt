@@ -1,0 +1,10 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+main
+{ 	
+	write(a);
+
+
+	return 0;
+}

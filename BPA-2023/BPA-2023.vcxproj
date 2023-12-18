@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="BPA-2023.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
+    <ClCompile Include="ConstValueCalculator.cpp" />
     <ClCompile Include="Dividing.cpp" />
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="FST.cpp" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodeGeneration.h" />
+    <ClInclude Include="ConstValuecalculator.h" />
     <ClInclude Include="Dividing.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="FST.h" />

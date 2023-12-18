@@ -28,7 +28,7 @@
 #define SIN_SUCCESS "[Синтаксический анализ]   Успех \n"
 
 #define WRITE_MSG_STATUS(destination) if (error.inext.line == -1) { destination << "Ошибка " << error.id << "\n" << error.message << "\n";} \
-else { destination << "Ошибка " << error.id << "\tстрока " << error.inext.line << ": \n" << error.message << "\n";}
+else { destination << "Ошибка " << error.id << "\tстрока " << error.inext.line << "\tпозиция " << error.inext.col << ": \n" << error.message << "\n";}
 
 
 namespace Error
@@ -37,7 +37,7 @@ namespace Error
 	{
 		int id;									//код ошибки
 		char message[ERROR_MAXSIZE_MESSAGE];    //сообщение об ошибке
-		struct IN								
+		struct IN
 		{
 			short line;      //Номер строки
 			short col;		 //номер позиции в сроке

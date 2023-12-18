@@ -41,10 +41,19 @@
 	FST::RELATION('=', 1), FST::RELATION('!', 1)),FST::NODE(1, FST::RELATION('=', 2)),\
 	FST::NODE()
 
-#define FST_DECLARE 4,	\
+#define FST_VAR 4,	\
 	FST::NODE(1, FST::RELATION('v', 1)),\
 	FST::NODE(1, FST::RELATION('a', 2)),\
 	FST::NODE(1, FST::RELATION('r', 3)),\
+	FST::NODE()
+
+
+#define FST_CONST 6,   \
+	FST::NODE(1, FST::RELATION('c', 1)),\
+	FST::NODE(1, FST::RELATION('o', 2)),\
+	FST::NODE(1, FST::RELATION('n', 3)),\
+	FST::NODE(1, FST::RELATION('s', 4)),\
+	FST::NODE(1, FST::RELATION('t', 5)),\
 	FST::NODE()
 
 #define FST_NUMBER 7,	\
@@ -298,7 +307,7 @@
 	FST::NODE(1, FST::RELATION('{', 1)),\
 	FST::NODE()
 
-#define FST_BRACELET 2,	\
+#define FST_RIGHTLET 2,	\
 	FST::NODE(1, FST::RELATION('}', 1)),\
 	FST::NODE()
 

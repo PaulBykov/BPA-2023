@@ -6,7 +6,7 @@ namespace Error
 					 110-119	 îøèáêè îòêğûòèÿ è ÷òåíèÿ ôàéëîâ
 	*/
 
-	ERROR errors[ERROR_MAX_ENTRY] = 
+	ERROR errors[ERROR_MAX_ENTRY] =
 	{
 		ERROR_ENTRY(0,"[Ñèñòåìíàÿ] Íåäîïóñòèìûé êîä îøèáêè"), //êîä îøèáêè âíå äèàïàçîíà 0 - ERROR_MAX_ENTRY
 		ERROR_ENTRY(1,"[Ñèñòåìíàÿ] Ñèñòåìíûé ñáîé"),
@@ -24,7 +24,7 @@ namespace Error
 		ERROR_ENTRY_NODEF(114), ERROR_ENTRY_NODEF5(115),
 		ERROR_ENTRY_NODEF10(120),ERROR_ENTRY_NODEF10(130),ERROR_ENTRY_NODEF10(140),ERROR_ENTRY_NODEF10(150),
 		ERROR_ENTRY_NODEF10(160),ERROR_ENTRY_NODEF10(170),ERROR_ENTRY_NODEF10(180),ERROR_ENTRY_NODEF10(190),
-	
+
 		ERROR_ENTRY(200,"[Ëåêñè÷åñêàÿ] Äâîéíîå îáúÿâëåíèå"),
 		ERROR_ENTRY(201	,"[Ëåêñè÷åñêàÿ] Îøèáêà ëåêñè÷åñêîãî àíàëèçà"),
 		ERROR_ENTRY(202,"[Ëåêñè÷åñêàÿ] Äëèíà èäåíòèôèêàòîğà áîëüøå 8"),
@@ -34,8 +34,8 @@ namespace Error
 		ERROR_ENTRY(206,"[Ëåêñè÷åñêàÿ] Îøèáêà, ìàêñèìàëüíûé ğàçìåğ òàáëèöû ëåêñåì 4096"),
 		ERROR_ENTRY(207,"[Ëåêñè÷åñêàÿ] Òàáëèöà ëåêñåì ïåğåïîëíåíà"),
 		ERROR_ENTRY(208,"[Ëåêñè÷åñêàÿ] Ìàêñèìàëüíîå çíà÷åíèå òèïà number 32767"),
-		ERROR_ENTRY(209,"[Ëåêñè÷åñêàÿ] Ïğåâûøåí ğàçìåğ symbol"),
-		ERROR_ENTRY(210, "[Ëåêñè÷åñêàÿ] Íåäîïóñòèìîå ñî÷èòàíèå ëèòåğàëà è òèïà äàííûõ"),
+		ERROR_ENTRY(209,"[Ëåêñè÷åñêàÿ] Ïğåâûøåí ìàêñèìàëüíûé ğàçìåğ symbol"),
+		ERROR_ENTRY_NODEF(210),
 		ERROR_ENTRY_NODEF5(211), ERROR_ENTRY_NODEF(216),ERROR_ENTRY_NODEF(217),ERROR_ENTRY_NODEF(218),ERROR_ENTRY_NODEF(219),
 		ERROR_ENTRY_NODEF10(220),
 		ERROR_ENTRY_NODEF10(230), ERROR_ENTRY_NODEF10(240),ERROR_ENTRY_NODEF50(250), ERROR_ENTRY_NODEF100(300), ERROR_ENTRY_NODEF100(400),
@@ -52,7 +52,10 @@ namespace Error
 		ERROR_ENTRY(509,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğå ôóíêöèè write()"),
 		ERROR_ENTRY(510,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïîäêëş÷åíèè áèáëèîòåêè"),
 		ERROR_ENTRY(511,"[Cåìàíòè÷åñêàÿ] Îøèáêà â ïàğàìåòğàõ öèêëà repeat()"),
-		ERROR_ENTRY_NODEF(512),ERROR_ENTRY_NODEF(513),ERROR_ENTRY_NODEF(514),
+		ERROR_ENTRY(512,"[Cåìàíòè÷åñêàÿ] Íåäîïóñòèìîå ñî÷èòàíèå ëèòåğàëà è òèïà äàííûõ"),
+		ERROR_ENTRY(513,"[Cåìàíòè÷åñêàÿ] Ïîïûòêà èçìåíèòü çíà÷åíèå êîíñòàíòû"),
+		ERROR_ENTRY(514,"[Cåìàíòè÷åñêàÿ] Ïîïûòêà èñïîëüçîâàíèÿ ïåğåìåííîé áåç çíà÷åíèÿ"),
+
 		ERROR_ENTRY_NODEF5(515), ERROR_ENTRY_NODEF10(520), ERROR_ENTRY_NODEF10(530),
 		ERROR_ENTRY_NODEF10(540), ERROR_ENTRY_NODEF50(550),
 
@@ -63,13 +66,15 @@ namespace Error
 		ERROR_ENTRY(604,"[Cèíòàêñè÷åñêàÿ] Îøèáêà â ïàğàìåòğàõ âûçûâàåìîé ôóíêöèè"),
 		ERROR_ENTRY(605,"[Cèíòàêñè÷åñêàÿ] Îøèáêà â óñëîâèè"),
 		ERROR_ENTRY(606,"[Cèíòàêñè÷åñêàÿ] Îøèáêà â îïåğàòîğå"),
-		ERROR_ENTRY_NODEF(607),ERROR_ENTRY_NODEF(608),ERROR_ENTRY_NODEF(609),
+		ERROR_ENTRY(607,"[Cèíòàêñè÷åñêàÿ] Îøèáêà â îïèñàíèè êîíñòàíòû"),
+		ERROR_ENTRY_NODEF(608),ERROR_ENTRY_NODEF(609),
 		ERROR_ENTRY_NODEF10(610),ERROR_ENTRY_NODEF10(620),ERROR_ENTRY_NODEF10(630),ERROR_ENTRY_NODEF10(640),
 		ERROR_ENTRY_NODEF50(650), ERROR_ENTRY_NODEF100(700),ERROR_ENTRY_NODEF100(800),ERROR_ENTRY_NODEF100(900)
 	};
+
 	ERROR geterror(int id)
 	{
-		ERROR error_info;	
+		ERROR error_info;
 		error_info.id = id;
 
 		if (id > 0 && id < ERROR_MAX_ENTRY)							// ñğàâíèâàíèå äèàïàçîíà

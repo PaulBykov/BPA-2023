@@ -1,41 +1,54 @@
 #pragma once
-#define LEXEMA_FIXSIZE	1			// фиксированный размер лексемы
+#define LEXEMA_FIXSIZE	1	
 #define LT_MAXSIZE		4096		// максимальное количество строк в таблице лексем
 #define LT_TI_NULLIDX	0xfffffff	// нет элемента таблицы идентификаторов
-#define LEX_INCLUDE		'u'	// лексема для uselib
-#define LEX_USHORT		't'	// лексема для integer
-#define LEX_STRING		't'	// лексема для string
-#define LEX_ID			'i'	// лексема для идентификатора
-#define LEX_LITERAL		'l'	// лексема для литерала
-#define LEX_FUNCTION	'f'	// лексема для function
-#define LEX_VAR			'd'	// лексема для var
-#define LEX_RETURN		'r'	// лексема для return
-#define LEX_PRINT		'p'	// лексема для print
-#define LEX_IF			'c'	// лексема для if
-#define LEX_ELSE		'e'	// лексема для else
-#define LEX_LOGICAL		'o'	// лексема для логических операторов
-#define LEX_MAIN		'm'	// лексема для main
-#define LEX_POW			'b'	// лексема для pow
-#define LEX_COMPARE		'a'	// лексема для compare
-#define LEX_SEMICOLON	';'	// лексема для ;
-#define LEX_COMMA		','	// лексема для ,
-#define LEX_LEFTBRACE	'{'	// лексема для {
-#define LEX_RIGHTBRACE	'}'	// лексема для }
-#define LEX_LEFTTHESIS	'('	// лексема для (
-#define LEX_RIGHTTHESIS	')'	// лексема для )
+
+
+
+#define LEX_INCLUDE		'u'	
+
+#define LEX_NUMBER		't'
+#define LEX_STRING		't'	
+#define LEX_BOOL		't'
+#define LEX_SYMBOL		't'
+
+#define LEX_ID			'i'	
+#define LEX_LITERAL		'l'	
+
+#define LEX_FUNCTION	'f'	
+#define LEX_VAR			'd'	
+#define LEX_CONST		'k'	
+#define LEX_RETURN		'r'	
+
+#define LEX_WRITE		'p'	
+#define LEX_IF			'c'	
+#define LEX_ELSE		'e'	
+#define LEX_REPEAT		'y'
+#define LEX_MAIN		'm'	
+
+#define LEX_POW			'b'	
+#define LEX_COMPARE		'a'	
+
+#define LEX_SEMICOLON	';'	
+#define LEX_COMMA		','	
+#define LEX_LEFTBRACE	'{'
+#define LEX_RIGHTBRACE	'}'
+#define LEX_LEFTTHESIS	'('
+#define LEX_RIGHTTHESIS	')'
 #define LEX_EQUAL		'='
 #define LEX_PLUS		'+'
 #define LEX_MINUS		'-'
-#define LEX_CYCLE		'y'	// цикл
+#define LEX_LOGICAL		'o'	// логические операторы
 
-namespace LT		// таблица лексем
+
+namespace LT
 {
-	struct Entry	// строка таблицы лексем
+	struct Entry
 	{
-		unsigned char lexema;	// лексема
-		int numOfString;				// номер строки в исходном тексте
-		int idxTI;						// индекс в таблице идентификаторов или LT_TI_NULLIDX
-		int priority;					// приоритет
+		unsigned char lexema;
+		int numOfString;
+		int indexIT;
+		int priority;
 	};
 
 	struct LexTable						// экземпляр таблицы лексем

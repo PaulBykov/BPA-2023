@@ -40,5 +40,4 @@ namespace FST
 		FST& fst
 	);
 
-
 }

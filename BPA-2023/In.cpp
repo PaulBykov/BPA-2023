@@ -7,28 +7,33 @@ namespace In
 	{
 		int currentLine = 0, currentCol = 0;
 		IN Info{ 0, 0, 0, nullptr, IN_CODE_TABLE };					//uniform инициализация (альтернатива == списки инициализации)
-		std::ifstream in(infile);									//открывает файл для чтения
-		if (!in.is_open())											//проверка на открытие файла иначе ошибка
+		std::ifstream in(infile);
+
+		if (!in.is_open()) {
 			throw ERROR_THROW(110);
+		}
+
 		std::string fulltext;
 		std::string temp;
-		while (!in.eof())											//пока открыт файл
+
+		while (!in.eof())
 		{
-			Info.lines++;											//считаем кол-во линий
-			std::getline(in, temp);									//запись строки в tеmp
-			temp += "\n";											//знак окончания строки
+			Info.lines++;
+			std::getline(in, temp);
+			temp += "\n";
 			fulltext += temp;
 		}
-		Info.text = new unsigned char[fulltext.size() + 1];			//выделяем память для текста
-		unsigned char* Ptemp = Info.text;							//указатель на участок пямати
+
+		Info.text = new unsigned char[fulltext.size() + 1];
+		unsigned char* Ptemp = Info.text;
 		for (int i = 0; i < fulltext.size(); ++i)
 		{
-			if ((Info.code[(unsigned char)fulltext[i]] == IN::F)) //Если запрещённый символ => ошибка
-			{
+			if ((Info.code[(unsigned char)fulltext[i]] == IN::F)) {
 				throw ERROR_THROW_IN(111, currentLine + 1, currentCol)
 			}
-			else if (Info.code[(unsigned char)fulltext[i]] == IN::I) // Если игнор символ 
+			else if (Info.code[(unsigned char)fulltext[i]] == IN::I) {
 				++Info.ignor;
+			}
 			else if ((Info.code[(unsigned char)fulltext[i]] == IN::T) || (Info.code[(unsigned char)fulltext[i]] == IN::S))// Если разрешенный символ 
 			{
 				*Ptemp = fulltext[i];

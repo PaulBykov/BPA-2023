@@ -1,0 +1,21 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+number function func(number a){
+	var bool info;
+	info = false;
+	
+	return 155;
+}
+
+main
+{ 	
+	
+	var string str;
+	str = "21";
+
+	var number result;
+	
+	result = func(str);
+
+	return 0;
+}

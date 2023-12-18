@@ -1,0 +1,55 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+number function max(number a, number b)
+{
+	var number res;
+	if (b > a) {
+		res = b;
+	} otherwise {
+		res = a;
+	}
+	return res;
+}
+
+number function min(number a, number b)
+{
+	var number result;
+	result = max(a, b);
+	
+	if(result == a){
+		result = b;
+	} otherwise{
+		result = a;
+	}
+	
+	return result;
+}
+
+main
+{ 	
+	var number cos;
+	cos = 1;
+	
+	repeat(cos){
+		cos = cos - 1;
+	}
+	
+	var number b;
+	const number a = 10;
+	b = 12;
+	
+	var number lclmax;
+	lclmax = max(a, b);
+	
+	var number lclmin;
+	lclmin = min(a, b);
+	
+	write("Max are: ");
+	write(lclmax);
+	
+	write("Min are: ");
+	write(lclmin);
+	
+	return 0;
+}
