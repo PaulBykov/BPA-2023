@@ -30,7 +30,7 @@ main
 
 	repeat(c)
 	{
-	 c= c - 1;
+	 write(c);
 	} 
 
 	b = 0;

@@ -1,0 +1,21 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+number function fib(number n)
+{
+	var number result;
+
+	return result;
+}
+
+main
+{ 	
+	var number n;
+	n = 10;
+	
+	var number res;
+	res = fib(n);
+	write(res);
+	
+	return 0;
+}

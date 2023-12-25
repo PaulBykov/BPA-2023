@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-unsigned char** divideText(In::IN in)		// формирование массива строк, состоящего из лексем
+unsigned char** divideText(In::IN in)
 {
 	int size = in.size;
 	unsigned char* text = in.text;
@@ -55,7 +55,7 @@ unsigned char** divideText(In::IN in)		// формирование массива строк, состоящего
 				word[j][k++] = text[++i];	// запись логических операторов
 			}
 
-			word[j++][k] = IN_CODE_ENDL; // конец лексемы
+			word[j++][k] = IN_CODE_ENDL;
 			k = -1;
 		}
 

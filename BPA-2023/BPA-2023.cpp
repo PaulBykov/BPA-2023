@@ -9,7 +9,7 @@ int _tmain(int argc, _TCHAR** argv)
 
 	try
 	{
-		Parm::PARM parm = Parm::getparm(argc, argv); // передача и обработка параметров
+		Parm::PARM parm = Parm::getparm(argc, argv);
 		log = Log::getlog(parm.log);
 
 		Log::WriteLog(log);			// Заголовок протокола
@@ -34,7 +34,7 @@ int _tmain(int argc, _TCHAR** argv)
 		mfst.savededucation();
 
 		if (!syntaxStatus) {
-			throw ERROR_THROW(600);
+			throw ERROR_THROW(300);
 		}
 
 
@@ -43,15 +43,13 @@ int _tmain(int argc, _TCHAR** argv)
 		//mfst.printrules();
 
 
-		if (Sem::checkSemantic(lex, log))
-		{
-			std::cout << SEM_SUCCESS;
-			*log.stream << SEM_SUCCESS;
-		}
+		Sem::checkSemantic(lex, log);
 
 
 		Gen::CodeGeneration(lex, parm.out);
 
+		std::cout << SEM_SUCCESS;
+		*log.stream << SEM_SUCCESS;
 		Log::Close(log);
 	}
 	catch (Error::ERROR error)

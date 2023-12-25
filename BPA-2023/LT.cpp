@@ -4,7 +4,7 @@ namespace LT
 {
 	LexTable Create(int size)
 	{
-		if (size > LT_MAXSIZE) 
+		if (size > LT_MAXSIZE)
 			throw ERROR_THROW(206);
 
 		LexTable Table;
@@ -40,7 +40,7 @@ namespace LT
 		return entry;
 	}
 
-	void showTable(LexTable lexTable, Log::LOG& log)		// вывод таблицы лексем
+	void showTable(LexTable lexTable, Log::LOG& log)
 	{
 		int number = 1;
 		*log.stream << "01 ";
@@ -62,7 +62,7 @@ namespace LT
 		}
 	}
 
-	void show(LexTable lexTable, Parm::PARM parm)		// вывод таблицы лексем
+	void show(LexTable lexTable, Parm::PARM parm)
 	{
 		int number = 1;
 		cout << "01 ";

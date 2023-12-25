@@ -1,6 +1,6 @@
 #pragma once
-#define IN_MAX_LEN_TEXT 1024*1024 //макс размер исходного кода 1MB
-#define IN_CODE_ENDL '\0' // символ конца строки
+#define IN_MAX_LEN_TEXT 1024*1024 // 1MB
+#define IN_CODE_ENDL '\0'
 //таблица проверки входной информации, индекс = код(Windows-1251) символа
 
 #define IN_CODE_TABLE {\
@@ -25,14 +25,15 @@
 
 namespace In
 {
-	struct IN //исходные данные
+	struct IN
 	{
-		enum { T = 1024, F = 2048, I = 4096, S = 512 }; //“-допустимый символ FUNC- недопустимый  I- игнорировать иначе заменить, S- сепараторы
-		int size; //размер исходного кода
-		int lines; //количество строк
-		int ignor;// количество проигнорированных строк
-		unsigned char* text; //исходный текст
-		int code[256]; // таблица проверки: T,FUNC,I новое значение
+		enum { T = 1024, F = 2048, I = 4096, S = 512 };
+		int size;
+		int lines;
+		int ignor;
+		unsigned char* text;
+		int code[256];
 	};
-	IN getin(wchar_t infile[]);//¬вести и проверить входной поток 
+
+	IN getin(wchar_t infile[]);
 }

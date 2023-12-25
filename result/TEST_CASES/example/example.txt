@@ -1,0 +1,80 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+number function max(number a, number b)
+{
+	var number res;
+	if (b > a) {
+		res = b;
+	} otherwise {
+		res = a;
+	}
+	return res;
+}
+
+main
+{ 	
+
+	var number d;
+	var number a;
+	a = 10;
+	
+	const number cos = 5 + a - 3;
+	
+	a = 1000 - 100 + pow(2, 2);
+
+	var number b;
+	b = 1;
+
+	write("Count to 10");
+	repeat(10)
+	{
+		write(b);
+		b = b + 1;
+	}
+
+
+	if(b >= a){
+    	write("b is greater with value: ");
+    } otherwise {
+    	write("a is greater with value: ");
+    }
+
+    if(a != b){
+    	write("max of a and b are: ");
+    	d = max(a, b);
+    	write(d);
+    }
+
+
+    const symbol lettera = 'a';
+    write(lettera);
+
+
+    var string str3;
+	var string str4;
+
+    write("lexicographic string comparison str3 and str4:");
+    str3 = "hello";
+	str4 = "hello ";
+
+	var number res;
+	res = compare(str3, str4);
+
+	write(str3);
+	if(res == 1) {
+		write(" == ");
+	} otherwise {
+		write(" != ");
+	}
+	write(str4);
+
+	var bool info;
+	info = true;
+
+	if(info == true){
+		write("true");
+	}
+	
+	return 0;
+}

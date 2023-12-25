@@ -15,7 +15,7 @@ number function max(number a, number b)
 number function min(number a, number b)
 {
 	var number result;
-	result = max(a, b);
+	result = min(a, b);
 	
 	if(result == a){
 		result = b;
@@ -36,7 +36,8 @@ main
 	}
 	
 	var number b;
-	const number a = 10;
+	var number a;
+	a = 10;
 	b = 12;
 	
 	var number lclmax;

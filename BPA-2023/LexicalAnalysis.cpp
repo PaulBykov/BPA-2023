@@ -118,12 +118,19 @@ namespace Lex
 				continue;
 			}
 
+			FST::FST fstEqual(word[i], FST_EQUAL);
+			if (FST::execute(fstEqual)) {
+				ADD_TO_LEX(LEX_EQUAL);
 
-			ADD_SIMPLE_LEX(FST_EQUAL, LEX_EQUAL);
+				FST::FST fstMin(word[i + 1], FST_MINUS);
+				if (FST::execute(fstMin)) {
+					word[i][0] = '0';
+					i--;
+				}
+				continue;
+			}
 
-			ADD_SIMPLE_LEX(FST_PLUS, LEX_PLUS);
 
-			ADD_SIMPLE_LEX(FST_MINUS, LEX_MINUS);
 
 			FST::FST fstLogical(word[i], FST_LOGICAL);
 			if (FST::execute(fstLogical))
@@ -244,8 +251,8 @@ namespace Lex
 			FST::FST fstMain(word[i], FST_MAIN);
 			if (FST::execute(fstMain))
 			{
-				ADD_TO_LEX(LEX_MAIN)
-					mainFuncCount++;
+				ADD_TO_LEX(LEX_MAIN);
+				mainFuncCount++;
 				_mbscpy(oldRegionPrefix, regionPrefix);
 				_mbscpy(regionPrefix, word[i]);
 				continue;
@@ -282,37 +289,19 @@ namespace Lex
 
 
 
-			FST::FST fstLiteralInt(word[i], FST_INTLIT); //если литерал 
+			FST::FST fstLiteralInt(word[i], FST_INTLIT);
 			if (FST::execute(fstLiteralInt))
 			{
 				short value;
 				char* buf;
+
 				if (atoi((char*)word[i]) > MAX_NUMBER) {
 					throw ERROR_THROW_IN(208, line, inlinePosition);
 				}
 
 
-
 				value = atoi((char*)word[i]);
 
-				for (int k = 0; k < idTable.size; k++) // поиск такого же
-				{
-					if (std::holds_alternative<short>(idTable.table[k].value)) {
-						if (get<short>(idTable.table[k].value) == value && idTable.table[k].idType == IT::LIT)
-						{
-							LT::Entry entryLT;
-							writeEntry(entryLT, LEX_LITERAL, k, line);
-							LT::Add(lexTable, entryLT);
-							findSameID = true;
-							break;
-						}
-					}
-
-				}
-				if (findSameID)	// если был найден такой же
-				{
-					continue;
-				}
 
 				LT::Entry entryLT;
 				writeEntry(entryLT, LEX_LITERAL, indexID++, line);
@@ -385,6 +374,9 @@ namespace Lex
 
 			ADD_SIMPLE_LEX(FST_INCLUDE, LEX_INCLUDE);
 
+			ADD_SIMPLE_LEX(FST_PLUS, LEX_PLUS);
+
+			ADD_SIMPLE_LEX(FST_MINUS, LEX_MINUS);
 
 			FST::FST fstIdentif(word[i], FST_ID);
 			if (FST::execute(fstIdentif))
@@ -434,15 +426,14 @@ namespace Lex
 						LT::Add(lexTable, entryLT);
 						continue;
 					}
+
 					_mbscpy(bufRegionPrefix, regionPrefix);
 					word[i] = _mbscat(bufRegionPrefix, word[i]);
 					idx = IT::IsIDRegion(idTable, word[i]);
 
 					if (idx != TI_NULLIDX)		// если такой идентификатор уже есть
 					{
-						if (lexTable.table[indexLex - 2].lexema == LEX_VAR
-							|| lexTable.table[indexLex - 2].lexema == LEX_CONST)
-						{
+						if (lexTable.table[indexLex - 2].lexema == LEX_VAR || lexTable.table[indexLex - 2].lexema == LEX_CONST) {
 							throw ERROR_THROW_IN(200, line, inlinePosition);
 						}
 
@@ -469,14 +460,12 @@ namespace Lex
 							entryIT.idType = IT::CONST;
 						}
 
-						if (entryIT.idDataType == IT::NUM || entryIT.idDataType == IT::BOOL)
-						{
+						if (entryIT.idDataType == IT::NUM || entryIT.idDataType == IT::BOOL) {
 							entryIT.value = short(TI_INT_DEFAULT);
 						}
 
 
-						if (entryIT.idDataType == IT::STR || entryIT.idDataType == IT::CHR)
-						{
+						if (entryIT.idDataType == IT::STR || entryIT.idDataType == IT::CHR) {
 							entryIT.value = TI_STR_DEFAULT;
 						}
 
@@ -485,9 +474,14 @@ namespace Lex
 					else
 					{
 						FST::FST fstLibCompare(startWord, FST_LIB_COMPARE);
+						FST::FST fstLibPow(startWord, FST_LIB_POW);
 
 						if (FST::execute(fstLibCompare)) {
 							entryLT.lexema = LEX_COMPARE;
+							entryIT.idType = IT::LIB;
+						}
+						else if (FST::execute(fstLibPow)) {
+							entryLT.lexema = LEX_POW;
 							entryIT.idType = IT::LIB;
 						}
 						else {
@@ -522,11 +516,11 @@ namespace Lex
 
 
 		if (mainFuncCount == 0) {
-			throw ERROR_THROW_IN(500, -1, -1);
+			throw ERROR_THROW_IN(400, -1, -1);
 		}
 
 		if (mainFuncCount > 1) {
-			throw ERROR_THROW_IN(501, -1, -1);
+			throw ERROR_THROW_IN(401, -1, -1);
 		}
 
 

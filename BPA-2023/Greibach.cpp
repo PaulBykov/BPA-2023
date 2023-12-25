@@ -12,7 +12,7 @@ namespace GRB
 			nt[i] = (GRBALPHABET)p[i];
 	};
 
-	Rule::Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...) // конструктор
+	Rule::Rule(GRBALPHABET pnn, int piderror, short psize, Chain c, ...)
 	{
 		nn = pnn;
 		iderror = piderror;
@@ -22,7 +22,7 @@ namespace GRB
 			chains[i] = p[i];
 	};
 
-	Greibach::Greibach(GRBALPHABET pstartN, GRBALPHABET pstbottom, short psize, Rule r, ...) // конструктор
+	Greibach::Greibach(GRBALPHABET pstartN, GRBALPHABET pstbottom, short psize, Rule r, ...)
 	{
 		startN = pstartN;
 		stbottomT = pstbottom;
@@ -37,7 +37,7 @@ namespace GRB
 		return greibach;
 	};
 
-	short Greibach::getRule(GRBALPHABET pnn, Rule& prule) // получить правило по нетерминалу, возвращающая номер правила или -1
+	short Greibach::getRule(GRBALPHABET pnn, Rule& prule) // нетерминал => номер правила или -1
 	{
 		short rc = -1;
 		short k = 0;
@@ -48,7 +48,7 @@ namespace GRB
 		return rc;
 	};
 
-	Rule Greibach::getRule(short n)	// // получить правило по номеру
+	Rule Greibach::getRule(short n)
 	{
 		Rule rc;
 		if (n < size)

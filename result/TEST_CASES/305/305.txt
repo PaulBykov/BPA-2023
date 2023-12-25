@@ -2,14 +2,14 @@ include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
 
 
 main
-{ 	
-	var number a;
-	a = 20;
+{
 	var number b;
-	b = 10;
+	b = 30;
 
-	const number c = b - a + 30 - b + 10;
-	write(c);
+	if(b = 10){
+		write(2);
+	}
 
+	
 	return 0;
 }

@@ -30,7 +30,7 @@ namespace Gen
 		}
 
 
-		// DEFAULT STUFF
+		// header
 		out << ".586\n"
 			<< ".model flat, stdcall\n"
 			<< "\tincludelib libucrt.lib\n"
@@ -59,7 +59,7 @@ namespace Gen
 				}
 
 				if (ID_ROW.idDataType == IT::NUM || ID_ROW.idDataType == IT::BOOL) {
-					out << " WORD " << get<short>(ID_ROW.value) << endl;
+					out << " SWORD " << get<short>(ID_ROW.value) << endl;
 				}
 			}
 		}
@@ -76,7 +76,7 @@ namespace Gen
 				}
 
 				if (ID_FROM_LEX_2.idDataType == IT::NUM || ID_FROM_LEX_2.idDataType == IT::BOOL) {
-					out << " WORD 0\n";
+					out << " SWORD 0\n";
 				}
 
 				if (ID_FROM_LEX_2.idDataType == IT::CHR) {
@@ -107,6 +107,7 @@ namespace Gen
 			flagLibFunc = false;
 
 
+
 		out << "\n.code\n";
 		for (int i = 0; i < lex.lexTable.size; i++)
 		{
@@ -128,7 +129,7 @@ namespace Gen
 							out << ID_FROM_LEX.idRegion << " : ";
 
 							if (ID_FROM_LEX.idDataType == IT::NUM || ID_FROM_LEX.idDataType == IT::BOOL) {
-								out << "WORD";
+								out << "SWORD";
 							}
 							else if (ID_FROM_LEX.idDataType == IT::CHR) {
 								out << "BYTE";
@@ -160,8 +161,66 @@ namespace Gen
 			case LEX_EQUAL:
 			{
 				int result_position = i - 1;
-				while (lex.lexTable.table[i].lexema != LEX_SEMICOLON)
-				{
+
+				if (lex.idTable.table[lex.lexTable.table[result_position].indexIT].idType == IT::CONST) {
+					break;
+				}
+
+
+				while (lex.lexTable.table[i].lexema != LEX_SEMICOLON) {
+					auto calculateFunc = [&]() {
+						string tmpName;
+						unsigned char lexema = lex.lexTable.table[i].lexema;
+						bool isLib = false;
+
+						switch (lexema) {
+						case LEX_COMPARE:
+						{
+							tmpName = "_compare";
+							i++;
+							isLib = true;
+							break;
+						}
+						case LEX_POW:
+						{
+							tmpName = "_pow";
+							i++;
+							isLib = true;
+							break;
+						}
+
+						case LEX_ID:
+						{
+							tmpName = (const char*)ID_FROM_LEX_INC.idRegion;
+							i++;
+							break;
+						}
+						}
+
+						for (; lex.lexTable.table[i].lexema != LEX_RIGHTTHESIS; i++)
+						{
+							if (lex.lexTable.table[i].lexema == LEX_ID || lex.lexTable.table[i].lexema == LEX_LITERAL) {
+								stack.push(lex.idTable.table[lex.lexTable.table[i].indexIT]);
+							}
+						}
+
+
+						while (!stack.empty()) {
+							if (isLib) {
+								out << "\tpush offset " << stack.top().idRegion << "\n";
+							}
+							else {
+								out << "\t movzx eax, " << stack.top().idRegion << "\n";
+								out << "\tpush eax" << "\n";
+							}
+
+							stack.pop();
+						}
+
+						out << "\tcall " << tmpName << "\n";
+						out << "\t push eax" << "\n";
+						};
+
 					switch (lex.lexTable.table[i].lexema) {
 					case LEX_COMPARE:
 					case LEX_POW:
@@ -169,95 +228,57 @@ namespace Gen
 					{
 						IT::IDTYPE type = lex.idTable.table[lex.lexTable.table[i].indexIT].idType;
 
-						if (type == IT::FUNC || type == IT::LIB)
-						{
-							string tmpName;
-							unsigned char lexema = lex.lexTable.table[i].lexema;
 
-							switch (lexema) {
-							case LEX_COMPARE:
-							{
-								tmpName = "_compare";
-								i++;
-								break;
-							}
-							case LEX_POW:
-							{
-								tmpName = "_pow";
-								i++;
-								break;
+						if (type == IT::FUNC || type == IT::LIB) {
+							if (flagFunc && funcName == (const char*)lex.idTable.table[lex.lexTable.table[i].indexIT].idRegion) {
+								throw ERROR_THROW_IN(416, lex.lexTable.table[i].numOfString, -1);
 							}
 
-							case LEX_ID:
-							{
-								tmpName = (const char*)ID_FROM_LEX_INC.idRegion;
-								break;
-							}
-							}
-
-
-							for (; lex.lexTable.table[i].lexema != LEX_RIGHTTHESIS; i++)
-							{
-								if (lex.lexTable.table[i].lexema == LEX_ID || lex.lexTable.table[i].lexema == LEX_LITERAL)
-								{
-
-									stack.push(lex.idTable.table[lex.lexTable.table[i].indexIT]);
-								}
-							}
-
-
-							while (!stack.empty())
-							{
-								if (stack.top().idDataType == IT::NUM || stack.top().idDataType == IT::BOOL)
-								{
-									out << "\tmovzx eax, " << stack.top().idRegion << endl;
-									out << "\tpush eax" << endl;
-								}
-
-								if (stack.top().idDataType == IT::STR || stack.top().idDataType == IT::CHR)
-								{
-									if (stack.top().idType == IT::LIT)
-										out << "\tpush offset " << stack.top().idRegion << endl;
-									else
-										out << "\tpush " << stack.top().idRegion << endl;
-								}
-
-								stack.pop();
-							}
-							out << "\tcall " << tmpName << "\n\tpush eax\n";
+							calculateFunc();
 							break;
 						}
-
 
 						if (ID_FROM_LEX.idType == IT::VAR || ID_FROM_LEX.idType == IT::PARM) {
 							out << "\tpush " << ID_FROM_LEX.idRegion << endl;
 							break;
 						}
 
-
 						break;
 					}
 					case LEX_PLUS:
 					{
-						out << "\tpop eax\n";
-						i++;
-
-						out << "\tpush " << ID_FROM_LEX.idRegion << endl;
-
 						out << "\tpop ebx\n";
-						out << "\tadd eax, ebx\n\tpush eax\n";
+
+						i++;
+						if (ID_FROM_LEX.idType == IT::FUNC || ID_FROM_LEX.idType == IT::LIB) {
+							calculateFunc();
+						}
+						else {
+							out << "\tpush " << ID_FROM_LEX.idRegion << "\n";
+							out << "\tpop eax\n";
+						}
+
+						out << "\tadd ebx, eax \n";
+						out << "\tpush ebx\n";
 
 						break;
 					}
 					case LEX_MINUS:
 					{
 						out << "\tpop ebx\n";
+
 						i++;
+						if (ID_FROM_LEX.idType == IT::FUNC || ID_FROM_LEX.idType == IT::LIB) {
+							calculateFunc();
+						}
+						else {
+							out << "\tpush " << ID_FROM_LEX.idRegion << "\n";
+							out << "\tpop eax\n";
+						}
 
-						out << "\tpush " << ID_FROM_LEX.idRegion << endl;
+						out << "\tsub ebx, eax \n";
+						out << "\tpush ebx\n";
 
-						out << "\tpop eax\n";
-						out << "\tsub ebx, eax\n\tpush ebx\n";
 						break;
 					}
 					case LEX_LITERAL:
@@ -272,7 +293,8 @@ namespace Gen
 							out << "offset ";
 						}
 
-						out << ID_FROM_LEX.id << endl;
+						out << ID_FROM_LEX.id << "\n";
+
 
 						break;
 					}
@@ -280,9 +302,6 @@ namespace Gen
 					i++;
 				}
 
-				if (lex.idTable.table[lex.lexTable.table[result_position].indexIT].idType == IT::CONST) {
-					break;
-				}
 
 				out << "\tpop " << lex.idTable.table[lex.lexTable.table[result_position].indexIT].idRegion << "\n";
 				break;
@@ -314,26 +333,27 @@ namespace Gen
 			{
 				if (flagMain && !flagThen && !flagElse && !flagFunc && !flagCycle)
 				{
-					if (flagRet)
-					{
+					if (flagRet) {
 						flagRet = false;
 					}
-					if (libPath.length() != 0)
+
+					if (libPath.length() != 0) {
 						out << "\tcall _pause\n";
+					}
+
 					out << "\tcall ExitProcess\nmain ENDP\nend main";
 				}
-				if (flagFunc)
-				{
-					if (flagRet)
-					{
+
+				if (flagFunc) {
+					if (flagRet) {
 						out << "\tpop eax\n\tret\n";
 						out << funcName << " ENDP\n\n";
 						flagFunc = false;		// ok?
 						flagRet = false;
 					}
 				}
-				if (flagThen)
-				{
+
+				if (flagThen) {
 					flagThen = false;
 					if (flagElse)
 					{
@@ -342,20 +362,19 @@ namespace Gen
 					}
 					out << "p" << numberOfPoints++ << ":\n";
 				}
-				if (flagElse)
-				{
+
+				if (flagElse) {
 					flagElse = false;
 					out << "ife" << numberOfEnds++ << ":\n";
 				}
-				if (flagCycle)
-				{
+
+				if (flagCycle) {
 					out << "loop " << "p" << numberOfPoints++ << "\n";
 					flagCycle = false;
 				}
+
 				break;
 			}
-
-
 			case LEX_REPEAT:
 			{
 				flagCycle = true;
@@ -443,7 +462,6 @@ namespace Gen
 
 				break;
 			}
-
 			case LEX_ELSE:
 			{
 				flagElse = true;
@@ -451,6 +469,7 @@ namespace Gen
 			}
 			case LEX_WRITE:
 			{
+				out << "\t mov ebx, ecx\n";
 				out << "\tpush ";
 
 				if (ID_FROM_LEX_2.idDataType == IT::NUM || ID_FROM_LEX_2.idDataType == IT::BOOL) {
@@ -459,15 +478,19 @@ namespace Gen
 				}
 				else {
 					if (ID_FROM_LEX_2.idType == IT::LIT) {
-						out << "offset " << ID_FROM_LEX_2.id << "\n\tcall _printS\n";
+						out << "offset " << ID_FROM_LEX_2.id;
 					}
 					else {
-						out << "offset " << ID_FROM_LEX_2.idRegion;
+						if (ID_FROM_LEX_2.idType == IT::CONST) {
+							out << "offset ";
+						}
 
-						out << "\n\tcall _printS\n";
+						out << ID_FROM_LEX_2.idRegion;
 					}
+					out << "\n\tcall _printS\n";
 				}
 
+				out << "\t mov ecx, ebx\n";
 				break;
 			}
 			}

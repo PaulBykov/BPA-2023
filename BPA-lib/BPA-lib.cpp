@@ -1,38 +1,50 @@
+﻿#include <cstdlib>
 #include <iostream>
 #include <string.h>
 
 extern "C" {
-	void _printN(unsigned short a)
+	void _printN(short a)
 	{
-		printf("%d\n", a);
+		std::cout << a << std::endl;
 	}
 
-	void _printS(char str)
+	void _printS(char* str)
 	{
-		printf("%c\n", str);
+		std::cout << str << std::endl;
 	}
 
-	unsigned short _compare(char* a, char* b)
+	short _pow(short* num, short* exponent)
 	{
-		if (strcmp(a, b) == 0)
+		short accum = 1;
+		for (int i = 0; i < *exponent; i++)
 		{
-			printf("strings are equal");
-			return 1;
+			if (accum * *num > 32767)
+			{
+				std::cout << "Overflow in pow()" << std::endl;
+				throw - 1;
+			}
+			accum *= *num;
 		}
+		return accum;
+	}
 
+	short _compare(char* a, char* b)
+	{
 		if (strcmp(a, b) < 0)
 		{
-			printf("strings are not equal");
+			std::cout << "strings are not equal" << std::endl;
 			return 0;
 		}
-
+		if (strcmp(a, b) == 0)
+		{
+			std::cout << "strings are equal" << std::endl;
+			return 1;
+		}
 		if (strcmp(a, b) > 0)
 		{
-			printf("strings are not equal");
+			std::cout << "strings are not equal" << std::endl;
 			return 2;
 		}
-
-		return -1;
 	}
 
 	void _pause() {

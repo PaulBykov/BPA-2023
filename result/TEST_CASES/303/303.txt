@@ -1,0 +1,13 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+number function func(const number a){
+	return 2;
+}
+
+main
+{
+	
+
+	
+	return 0;
+}

@@ -1,29 +1,39 @@
 #pragma once
 #include "stdafx.h"
-#define GRB_ERROR_SERIES 600
+
+#define GRB_ERROR_SERIES 300
+
 #define NS(n)	GRB::Rule::Chain::N(n)
 #define TS(n)	GRB::Rule::Chain::T(n)
 #define ISNS(n)	GRB::Rule::Chain::isN(n)
+
+
+#define FUNC_CALL TS('i'), TS('('), NS('W'), TS(')')
+#define POW_CALL TS('a'), TS('('), NS('W'), TS(')')
+#define COMPARE_CALL TS('b'), TS('('), NS('W'), TS(')')
+
 
 namespace GRB
 {
 	Greibach greibach(
 		NS('S'), // стартовый символ
 		TS('$'), //дно стека      
-		6,									  // количество правил
+		6,
 		Rule(
 			NS('S'),
 			GRB_ERROR_SERIES + 0,    // неверная структура программы
-			5,
+			7,
 			Rule::Chain(2, TS('u'), TS('l')),
 			Rule::Chain(3, TS('u'), TS('l'), NS('S')),
 			Rule::Chain(7, TS('m'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}')),
 			Rule::Chain(13, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S')),
-			Rule::Chain(12, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S'))
+			Rule::Chain(12, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S')),
+			Rule::Chain(12, TS('t'), TS('f'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S')),
+			Rule::Chain(11, TS('t'), TS('f'), TS('i'), TS('('), TS(')'), TS('{'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S'))
 		),
 		Rule(
 			NS('N'),
-			GRB_ERROR_SERIES + 1,    // конструкции в функциях
+			GRB_ERROR_SERIES + 1,    // ошибка в конструкции
 			18,
 			Rule::Chain(5, TS('d'), TS('t'), TS('i'), TS(';'), NS('N')),
 
@@ -58,17 +68,25 @@ namespace GRB
 		Rule(
 			NS('E'),
 			GRB_ERROR_SERIES + 2,    // ошибка в выражении
-			9,
+			15,
 			Rule::Chain(1, TS('i')),
 			Rule::Chain(1, TS('l')),
-			Rule::Chain(4, TS('i'), TS('('), NS('W'), TS(')')),
-			Rule::Chain(4, TS('b'), TS('('), NS('W'), TS(')')),
-			Rule::Chain(4, TS('a'), TS('('), NS('W'), TS(')')),
 
 			Rule::Chain(3, TS('i'), TS('+'), NS('E')),
 			Rule::Chain(3, TS('l'), TS('+'), NS('E')),
 			Rule::Chain(3, TS('i'), TS('-'), NS('E')),
-			Rule::Chain(3, TS('l'), TS('-'), NS('E'))
+			Rule::Chain(3, TS('l'), TS('-'), NS('E')),
+
+			Rule::Chain(4, FUNC_CALL),
+			Rule::Chain(4, POW_CALL),
+			Rule::Chain(4, COMPARE_CALL),
+
+			Rule::Chain(6, FUNC_CALL, TS('+'), NS('E')),
+			Rule::Chain(6, POW_CALL, TS('+'), NS('E')),
+			Rule::Chain(6, COMPARE_CALL, TS('+'), NS('E')),
+			Rule::Chain(6, FUNC_CALL, TS('-'), NS('E')),
+			Rule::Chain(6, POW_CALL, TS('-'), NS('E')),
+			Rule::Chain(6, COMPARE_CALL, TS('-'), NS('E'))
 		),
 		Rule(
 			NS('F'),

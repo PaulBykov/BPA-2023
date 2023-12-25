@@ -9,6 +9,7 @@ namespace Sem
 		int inlinePosition = 0;
 		int prevNumOfStr = 0;
 
+
 		for (int i = 0; i < tables.lexTable.size; i++) {
 			IT::IDDATATYPE dataTypeLeftOp;
 			IT::IDDATATYPE dataTypeRightOp;
@@ -30,10 +31,14 @@ namespace Sem
 					}
 				}
 
-				throw ERROR_THROW_IN(510, tables.lexTable.table[i].numOfString, inlinePosition); //ошибка при подключении библиотееи
+				throw ERROR_THROW_IN(410, tables.lexTable.table[i].numOfString, inlinePosition); //ошибка при подключении библиотееи
 			}
 			case LEX_EQUAL:
 			{
+				if (PREV_ID.idType == IT::CONST && PREV_ID.defined) {
+					throw ERROR_THROW_IN(413, i, inlinePosition);
+				}
+
 				if (NEXT_ID.idType == IT::LIB
 					|| (NEXT_ID.idType == IT::PARM || PREV_ID.idType == IT::PARM)) {
 					PREV_ID.defined = true;
@@ -41,34 +46,39 @@ namespace Sem
 				}
 
 				if (PREV_ID.idDataType != NEXT_ID.idDataType) {
-					throw ERROR_THROW_IN(512, tables.lexTable.table[i].numOfString, inlinePosition);
+					throw ERROR_THROW_IN(412, i, inlinePosition);
 				}
 
-				if (PREV_ID.idType == IT::CONST && PREV_ID.defined) {
-					throw ERROR_THROW_IN(513, tables.lexTable.table[i].numOfString, inlinePosition);
-				}
-
-
-				{ // расчет значений на этапе компиляции
+				// расчет значений на этапе компиляции
+				{
 					string expr;
 					bool isThereStr = false;
 
 					int j = i + 1;
 					while (tables.lexTable.table[j].lexema != LEX_SEMICOLON) {
-						if (tables.lexTable.table[j].lexema == LEX_ID) {
-							if (tables.idTable.table[tables.lexTable.table[j].indexIT].idType == IT::FUNC) {
-								goto innerBreak;
+						if (tables.lexTable.table[j].lexema == LEX_ID
+							|| tables.lexTable.table[j].lexema == LEX_POW
+							|| tables.lexTable.table[j].lexema == LEX_COMPARE)
+						{
+							auto current = tables.idTable.table[tables.lexTable.table[j].indexIT];
+
+							if (current.idType == IT::FUNC || current.idType == IT::LIB) {
+								if (PREV_ID.idType == IT::CONST) {
+									throw ERROR_THROW_IN(415, tables.lexTable.table[i].numOfString, inlinePosition);
+								}
+
+								break;
 							}
 						}
 
 						if (tables.lexTable.table[j].lexema == LEX_LITERAL || tables.lexTable.table[j].lexema == LEX_ID) {
-							if (tables.idTable.table[tables.lexTable.table[j].indexIT].idDataType == IT::NUM
-								|| tables.idTable.table[tables.lexTable.table[j].indexIT].idDataType == IT::BOOL)
-							{
-								expr += to_string(get<short>(tables.idTable.table[tables.lexTable.table[j].indexIT].value));
+							auto current = tables.idTable.table[tables.lexTable.table[j].indexIT];
+
+							if (current.idDataType == IT::NUM || current.idDataType == IT::BOOL) {
+								expr += to_string(get<short>(current.value));
 							}
 							else {
-								expr = get<string>(tables.idTable.table[tables.lexTable.table[j].indexIT].value);
+								expr = get<string>(current.value);
 
 								isThereStr = true;
 								break;
@@ -81,7 +91,6 @@ namespace Sem
 							else {
 								expr.push_back('-');
 							}
-
 						}
 
 						j++;
@@ -97,56 +106,51 @@ namespace Sem
 
 				}
 
-			innerBreak:
-
 				PREV_ID.defined = true;
 
 				break;
 			}
 			case LEX_PLUS:
 			{
-				dataTypeLeftOp = PREV_ID.idDataType;
+				if (tables.lexTable.table[i - 1].lexema == LEX_RIGHTTHESIS) {
+					int k = i - 1;
+					while (tables.lexTable.table[k].lexema != LEX_LEFTTHESIS) {
+						k--; // ищем сам id ответсвенный за вызов функции
+					}
+					dataTypeLeftOp = tables.idTable.table[tables.lexTable.table[k - 1].indexIT].idDataType;
+				}
+				else {
+					dataTypeLeftOp = PREV_ID.idDataType;
+				}
+
 				dataTypeRightOp = NEXT_ID.idDataType;
-
-				if (PREV_ID.idType == IT::VAR) {
-					if (!PREV_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
-
-				if (NEXT_ID.idType == IT::VAR) {
-					if (!NEXT_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
 
 
 				if (!(dataTypeLeftOp == IT::NUM && dataTypeRightOp == IT::NUM)) {
-					throw ERROR_THROW_IN(508, tables.lexTable.table[i].numOfString, inlinePosition);
+					throw ERROR_THROW_IN(408, tables.lexTable.table[i].numOfString, inlinePosition);
 				}
 
 				break;
 			}
 			case LEX_MINUS:
 			{
-				dataTypeLeftOp = PREV_ID.idDataType;
+				if (tables.lexTable.table[i - 1].lexema == LEX_RIGHTTHESIS) {
+					int k = i - 1;
+					while (tables.lexTable.table[k].lexema != LEX_LEFTTHESIS) {
+						k--; // ищем сам id ответсвенный за вызов функции
+					}
+					dataTypeLeftOp = tables.idTable.table[tables.lexTable.table[k - 1].indexIT].idDataType;
+				}
+				else {
+					dataTypeLeftOp = PREV_ID.idDataType;
+				}
+
+
 				dataTypeRightOp = NEXT_ID.idDataType;
-
-				if (PREV_ID.idType == IT::VAR) {
-					if (!PREV_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
-
-				if (NEXT_ID.idType == IT::VAR) {
-					if (!NEXT_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
 
 
 				if (!(dataTypeLeftOp == IT::NUM && dataTypeRightOp == IT::NUM)) {
-					throw ERROR_THROW_IN(508, tables.lexTable.table[i].numOfString, inlinePosition);
+					throw ERROR_THROW_IN(408, tables.lexTable.table[i].numOfString, inlinePosition);
 				}
 				break;
 
@@ -155,14 +159,6 @@ namespace Sem
 			{
 				i++;
 
-				if (NEXT_ID.idType == IT::VAR) {
-					if (!NEXT_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
-
-
-
 				if (tables.lexTable.table[i++].lexema == LEX_LEFTTHESIS) {
 					if ((CURR_ID.idType == IT::VAR || CURR_ID.idType == IT::CONST || CURR_ID.idType == IT::LIT)) {
 						break;
@@ -170,7 +166,7 @@ namespace Sem
 				}
 
 
-				throw ERROR_THROW_IN(509, tables.lexTable.table[i].numOfString, inlinePosition);
+				throw ERROR_THROW_IN(409, tables.lexTable.table[i].numOfString, inlinePosition);
 
 			}
 			case LEX_LOGICAL: // проверка логический операторов
@@ -178,23 +174,11 @@ namespace Sem
 				dataTypeLeftOp = PREV_ID.idDataType;
 				dataTypeRightOp = NEXT_ID.idDataType;
 
-				if (PREV_ID.idType == IT::VAR || PREV_ID.idType == IT::CONST) {
-					if (!PREV_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
-
-				if (NEXT_ID.idType == IT::VAR || NEXT_ID.idType == IT::CONST) {
-					if (!NEXT_ID.defined) {
-						throw ERROR_THROW_IN(514, tables.lexTable.table[i].numOfString, inlinePosition);
-					}
-				}
-
 
 				if (!(dataTypeLeftOp == IT::NUM && dataTypeRightOp == IT::NUM)
 					&& !(dataTypeLeftOp == IT::BOOL && dataTypeRightOp == IT::BOOL))
 				{
-					throw ERROR_THROW_IN(508, tables.lexTable.table[i].numOfString, inlinePosition);
+					throw ERROR_THROW_IN(408, tables.lexTable.table[i].numOfString, inlinePosition);
 				}
 
 				break;
@@ -211,14 +195,14 @@ namespace Sem
 						IT::IDDATATYPE ctype = tables.idTable.table[tables.lexTable.table[j].indexIT].idDataType;
 
 						if (ctype != IT::STR) {
-							throw ERROR_THROW_IN(507, tables.lexTable.table[i].numOfString, inlinePosition);
+							throw ERROR_THROW_IN(407, tables.lexTable.table[i].numOfString, inlinePosition);
 						}
 
 					}
 				}
 
 				if (paramsCount != 2) {
-					throw ERROR_THROW_IN(507, tables.lexTable.table[i].numOfString, inlinePosition);
+					throw ERROR_THROW_IN(407, tables.lexTable.table[i].numOfString, inlinePosition);
 				}
 
 				break;
@@ -234,14 +218,14 @@ namespace Sem
 						IT::IDDATATYPE ctype = tables.idTable.table[tables.lexTable.table[j].indexIT].idDataType;
 
 						if (ctype != IT::NUM) {
-							throw ERROR_THROW_IN(511, tables.lexTable.table[i].numOfString, inlinePosition);
+							throw ERROR_THROW_IN(411, tables.lexTable.table[i].numOfString, inlinePosition);
 						}
 
 					}
 				}
 
 				if (paramsCount != 1) {
-					throw ERROR_THROW_IN(511, tables.lexTable.table[i].numOfString, inlinePosition);
+					throw ERROR_THROW_IN(411, tables.lexTable.table[i].numOfString, inlinePosition);
 				}
 
 				break;
@@ -251,10 +235,19 @@ namespace Sem
 			{
 				IT::Entry tmp = CURR_ID;
 
+				if (tables.lexTable.table[i - 1].lexema != LEX_BOOL // любой тип
+					&& tables.lexTable.table[i + 1].lexema != LEX_EQUAL) {  // если пытаемся записать значение
+					if (tmp.idType == IT::VAR) {
+						if (!tmp.defined) {
+							throw ERROR_THROW_IN(414, tables.lexTable.table[i].numOfString, inlinePosition);
+						}
+					}
+				}
+
+
 				if (i > 0 && tables.lexTable.table[i - 1].lexema == LEX_FUNCTION)
 				{
-					if (tmp.idType == IT::FUNC)
-					{
+					if (tmp.idType == IT::FUNC) {
 						for (int k = i + 1; k != tables.lexTable.size; k++)
 						{
 							char l = tables.lexTable.table[k].lexema;
@@ -275,7 +268,7 @@ namespace Sem
 								} while (lit != LEX_RIGHTTHESIS && t < tables.lexTable.size);
 
 								if (paramCount > PARAMS_MAX) {
-									throw ERROR_THROW_IN(503, tables.lexTable.table[k].numOfString, inlinePosition);
+									throw ERROR_THROW_IN(403, tables.lexTable.table[k].numOfString, inlinePosition);
 								}
 							}
 
@@ -286,7 +279,7 @@ namespace Sem
 								{
 									// тип функции и возвращаемого значения не совпадают
 									if (tables.idTable.table[lexAfterReturn].idDataType != tmp.idDataType) {
-										throw ERROR_THROW_IN(502, tables.lexTable.table[k].numOfString, inlinePosition);
+										throw ERROR_THROW_IN(402, tables.lexTable.table[k].numOfString, inlinePosition);
 									}
 								}
 								break;
@@ -311,34 +304,31 @@ namespace Sem
 						}
 
 						if (protoParamsCount > PARAMS_MAX)
-							throw ERROR_THROW_IN(503, tables.lexTable.table[i].numOfString, inlinePosition);
+							throw ERROR_THROW_IN(403, tables.lexTable.table[i].numOfString, inlinePosition);
 
 						// проверка передаваемых параметров
-						for (int j = i + 1; tables.lexTable.table[j].lexema != LEX_RIGHTTHESIS; j++)
-						{
+						for (int j = i + 1; tables.lexTable.table[j].lexema != LEX_RIGHTTHESIS; j++) {
 							// проверка соответствия передаваемых параметров прототипам
-							if (tables.lexTable.table[j].lexema == LEX_ID || tables.lexTable.table[j].lexema == LEX_LITERAL)
-							{
+							if (tables.lexTable.table[j].lexema == LEX_ID || tables.lexTable.table[j].lexema == LEX_LITERAL) {
 								IT::IDDATATYPE ctype = tables.idTable.table[tables.lexTable.table[j].indexIT].idDataType;
-								if (!queue.empty())
-								{
-									if (ctype != tables.idTable.table[queue.front().indexIT].idDataType)
-									{
+
+								if (!queue.empty()) {
+									if (ctype != tables.idTable.table[queue.front().indexIT].idDataType) {
 										// Несовпадение типов передаваемых параметров
-										throw ERROR_THROW_IN(504, tables.lexTable.table[i].numOfString, inlinePosition);
+										throw ERROR_THROW_IN(404, tables.lexTable.table[i].numOfString, inlinePosition);
 									}
 									queue.pop();
 								}
 								else
 								{
 									// Количество передаваемых и принимаемых параметров не совпадает
-									throw ERROR_THROW_IN(505, tables.lexTable.table[i].numOfString, inlinePosition);
+									throw ERROR_THROW_IN(405, tables.lexTable.table[i].numOfString, inlinePosition);
 								}
 							}
 						}
 						if (!queue.empty())
 						{
-							throw ERROR_THROW_IN(505, tables.lexTable.table[i].numOfString, inlinePosition);
+							throw ERROR_THROW_IN(405, tables.lexTable.table[i].numOfString, inlinePosition);
 						}
 					}
 				}

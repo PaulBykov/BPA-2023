@@ -3,7 +3,7 @@
 namespace In
 {
 
-	IN getin(wchar_t infile[])//Используется для ввода и проверки информации из файла с исходными кодами.
+	IN getin(wchar_t infile[])
 	{
 		int currentLine = 0, currentCol = 0;
 		IN Info{ 0, 0, 0, nullptr, IN_CODE_TABLE };					//uniform инициализация (альтернатива == списки инициализации)
@@ -52,7 +52,7 @@ namespace In
 			else
 				++currentCol;
 		}
-		*Ptemp = IN_CODE_ENDL;										//признак конца строки
+		*Ptemp = IN_CODE_ENDL;
 		Info.size = strlen((char*)Info.text);			//количество символо = количество всех элем - \n
 		unsigned char* str = new unsigned char[Info.size];
 		in.close();

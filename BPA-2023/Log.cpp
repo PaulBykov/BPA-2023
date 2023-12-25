@@ -2,38 +2,36 @@
 namespace Log
 {
 
-	LOG getlog(wchar_t logfile[]) //Используется для создания и открытия потокового вывода протокола.
-	//открывает (создает) выходной поток;
+	LOG getlog(wchar_t logfile[])
 	{
 		LOG temp;
-		temp.stream = new std::ofstream(logfile);					//динамическое выделение ofstream и инициализация указателя на этот объект и открытие
+		temp.stream = new std::ofstream(logfile);
 		if (!temp.stream->is_open())
 			throw ERROR_THROW(112);
-		wcscpy_s(temp.logfile, logfile);							//копирование logfile в temp.logfile
+		wcscpy_s(temp.logfile, logfile);
 		return temp;
 	}
 
-	void WriteLine(LOG log, const char* c, ...)//осуществляет конкатенацию всех строк заданных параметрами, 
+	void WriteLine(LOG log, const char* c, ...)
 	{
-		const char** ptr = &c;										//берем адрес-адреса
-		while (strlen(*ptr))										//пока не встретим L""
+		const char** ptr = &c;
+		while (strlen(*ptr))
 		{
-			*log.stream << *ptr;									// запись в файл параметра
-			++ptr;													//перемещаемся на следующий параметр
+			*log.stream << *ptr;
+			++ptr;
 		}
 		*log.stream << std::endl;
 	}
 
-	void WriteLine(LOG log, const wchar_t* c, ...)//формирует строку и выводит ее в протокол.
-	
+	void WriteLine(LOG log, const wchar_t* c, ...)
+
 	{
 		const wchar_t** ptr = &c;
-		while (wcslen(*ptr))		//wcslen () возвращает длину заданной широкой строки
+		while (wcslen(*ptr))
 		{
 			char out[PARM_MAX_SIZE];
 			size_t charsConverted = 0;								//функция преобразовавающая wchar_t* в char
-			wcstombs_s(&charsConverted, out, *ptr, PARM_MAX_SIZE);	//Преобразует последовательность расширенных символов в соответствующую 
-			//последовательность многобайтовых символов
+			wcstombs_s(&charsConverted, out, *ptr, PARM_MAX_SIZE);	//Преобразует последовательность расширенных символов в соответствующую  последовательность многобайтовых символов
 			// 1-ый аргумент: Размер в байтах преобразованной строки, включая нулевой терминатор 2-
 			*log.stream << out;										// запись в файл параметра	
 			++ptr;
@@ -41,19 +39,16 @@ namespace Log
 		*log.stream << std::endl;
 	}
 
-	void WriteLog(LOG log) //Используется для вывода заголовка протокола вреиени
-	//для получения текущей даты и времени в формате строки используйте функции time, localtime_s и strftime.
+	void WriteLog(LOG log)
 	{
-		time_t  t = time(nullptr);									// time_t = количество секунд time()- Текущее календарное время типа c 1 января 1970 
-		tm  now;														// структура содержащая сек мин час ...
-		localtime_s(&now, &t);										//Преобразует time_t в календарное время, выраженное в местном времени в хранилище struct tm
-		char date[PARM_MAX_SIZE];									//массив для вывода времени
-		strftime(date, PARM_MAX_SIZE, "%d.%m.%Y %H:%M:%S", &now);	//фукнция преобразующая структуру tm в массив c макс кол-вом символов для копирования PARM_MAX_SIZE в формате day month year...
-		*log.stream << "---- Протокол ------- \n Дата: " << date << std::endl;
+		time_t  t = time(nullptr);
+		tm  now;
+		localtime_s(&now, &t);
+		char date[PARM_MAX_SIZE];
+		strftime(date, PARM_MAX_SIZE, "%d.%m.%Y %H:%M:%S", &now);
 	}
 
-	void WriteParm(LOG log, Parm::PARM parm)//Используется для вывода в протокол информации о входных параметрах
-		//выводит в протокол информацию о параметрах(образец в тесте)
+	void WriteParm(LOG log, Parm::PARM parm)
 	{
 		*log.stream << "---- Параметры -------" << std::endl;
 		char out[PARM_MAX_SIZE];
@@ -66,8 +61,7 @@ namespace Log
 		*log.stream << "-in: " << out << std::endl;
 	}
 
-	void WriteIn(LOG log, In::IN in)//Используется для вывода в протокол информации о входных данных(исходный код)
-	//выводит в протокол информацию о входных данных(образец в тесте)
+	void WriteIn(LOG log, In::IN in)
 	{
 		*log.stream << "---- Исходные данные -----" << std::endl;
 		*log.stream << "Количество символов: " << in.size << std::endl;
@@ -75,8 +69,7 @@ namespace Log
 		*log.stream << "Количество строк:    " << in.lines << std::endl;
 	}
 
-	void WriteError(LOG log, Error::ERROR error)//Используется для вывода в протокол или на консоль информации об ошибке.
-	// выводит в протокол информацию об ошибке; если протокол не открыт, выводит информацию на консоль(образец в тесте)
+	void WriteError(LOG log, Error::ERROR error)
 	{
 		if (log.stream == nullptr || !log.stream->is_open())
 		{

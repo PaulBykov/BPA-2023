@@ -1,0 +1,11 @@
+include "D:/LABS2/BPA-2023/BPA-lib/Debug/BPA-lib.lib"
+
+
+main
+{ 	
+	const number test = 3 + pow(2, 3) - 6;
+
+	write(test);
+	
+	return 0;
+}

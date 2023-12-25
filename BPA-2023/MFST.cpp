@@ -12,21 +12,21 @@ lbuf[1024];	// для ленты
 
 namespace MFST
 {
-	MfstState::MfstState() //конструктор
+	MfstState::MfstState()
 	{
 		lenta_position = 0;
 		nrule = -1;
 		nrulechain = -1;
 	};
 
-	MfstState::MfstState(short pposition, MFSTSTACK pst, short pnrulechain) //конструктор
+	MfstState::MfstState(short pposition, MFSTSTACK pst, short pnrulechain)
 	{
 		lenta_position = pposition;
 		st = pst;
 		nrulechain = pnrulechain;
 	};
 
-	MfstState::MfstState(short pposition, MFSTSTACK pst, short pnrule, short pnrulechain)		// конструктор запоминаем правило
+	MfstState::MfstState(short pposition, MFSTSTACK pst, short pnrule, short pnrulechain)
 	{
 		lenta_position = pposition;
 		st = pst;
@@ -34,7 +34,7 @@ namespace MFST
 		nrulechain = pnrulechain;
 	};
 
-	Mfst::MfstDiagnosis::MfstDiagnosis() //конструктор
+	Mfst::MfstDiagnosis::MfstDiagnosis()
 	{
 		lenta_position = -1;
 		rc_step = SURPRISE;
@@ -42,7 +42,7 @@ namespace MFST
 		nrule_chain = -1;
 	};
 
-	Mfst::MfstDiagnosis::MfstDiagnosis(short plenta_position, RC_STEP prc_step, short pnrule, short pnrule_chain) //конструктор
+	Mfst::MfstDiagnosis::MfstDiagnosis(short plenta_position, RC_STEP prc_step, short pnrule, short pnrule_chain)
 	{
 		lenta_position = plenta_position;
 		rc_step = prc_step;
@@ -50,9 +50,9 @@ namespace MFST
 		nrule_chain = pnrule_chain;
 	};
 
-	Mfst::Mfst() { lenta = 0; lenta_size = lenta_position = 0; traceIsOn = false; }; //конструктор
+	Mfst::Mfst() { lenta = 0; lenta_size = lenta_position = 0; traceIsOn = false; };
 
-	Mfst::Mfst(Lex::LEX plex, GRB::Greibach pgrebach, bool traceIsOnSwitch) //конструктор
+	Mfst::Mfst(Lex::LEX plex, GRB::Greibach pgrebach, bool traceIsOnSwitch)
 	{
 		traceIsOn = traceIsOnSwitch;
 		grebach = pgrebach;
@@ -69,11 +69,11 @@ namespace MFST
 		nrulechain = -1;
 	};
 
-	Mfst::RC_STEP Mfst::step()		// шаг автомата
+	Mfst::RC_STEP Mfst::step()
 	{
 		RC_STEP rc = SURPRISE;
 
-		if (lenta_position < lenta_size)	// если лента не закончилась
+		if (lenta_position < lenta_size)
 		{
 			if (ISNS(st.top()))			// если на вершине стеке нетерминал
 			{
@@ -230,7 +230,7 @@ namespace MFST
 				rc = true;
 			}
 			else {
-				throw ERROR_THROW(600);
+				throw ERROR_THROW(300);
 			}
 			break;
 		case NS_NORULE:
@@ -303,7 +303,8 @@ namespace MFST
 		{
 			errid = grebach.getRule(diagnosis[n].nrule).iderror;
 			Error::ERROR err = Error::geterror(errid);
-			throw err;
+
+			throw ERROR_THROW_IN(err.id, lex.lexTable.table[lpos].numOfString, -1);
 			//sprintf_s(buf, MFST_DIAGN_MAXSIZE, "Ошибка %d:\t строка %d,\n %s", err.id, lex.lexTable.table[lpos].numOfString, err.message);
 			rc = buf;
 		};
